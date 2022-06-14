@@ -1,0 +1,59 @@
+TCP CLIENT:
+import java.io.*; 
+import java.net.*; 
+import java.util.*;
+public class TCPClient
+{ 
+public static void main (String[] args)
+ { 
+Scanner sc= new Scanner(System.in);
+ String str;
+ try
+ { 
+ Socket s=new Socket ("localhost",8080);
+ DataOutputStream dout= new DataOutputStream (s.getOutputStream());
+ do
+ {
+ System.out.println("Enter message");
+ str=sc.nextLine();
+ dout.writeUTF(str);
+ dout.flush();
+ }
+ while (!str.equals("quit"));
+ dout.close(); 
+ s.close();
+ } 
+ catch(Exception e)
+ { 
+ System.out.println(e);
+ }
+ }
+ }
+
+TCP SERVER:
+ import java.io.*;
+ import java.net.*;
+ public class TCPServer
+ { 
+ public static void main(String[] args)
+ { 
+ String str;
+ try
+ { 
+ ServerSocket ss = new ServerSocket(8080);
+ Socket s=ss.accept();
+ do
+ { 
+ DataInputStream dis = new DataInputStream(s.getInputStream());
+ str = (String) dis.readUTF();
+ System.out.println("message = " +str);
+ } 
+ while(!str.equals("quit"));
+ ss.close();
+ } 
+ catch(Exception e)
+ {
+ System.out.println(e);
+ } 
+ }
+ }
